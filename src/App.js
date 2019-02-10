@@ -62,6 +62,8 @@ class App extends Component {
       case 'settings': {
         return (
           <Settings
+            speed={this.state.speed}
+            wall={this.state.wall}
             setWall={(wall) => this.setWall(wall)}
             setSpeed={(speed) => this.setSpeed(speed)}
             goBack={() => this.navigate('')}
