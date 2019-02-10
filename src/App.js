@@ -18,19 +18,71 @@ class App extends Component {
     }
   }
 
+  navigate(screen) {
+    this.setState({
+      screen
+    });
+  }
+
+  setWall(wall) {
+    this.setState({
+      wall
+    });
+  }
+
+  setSpeed(speed) {
+    this.setState({
+      speed
+    });
+  }
+
+  incrementScore() {
+    this.setState({
+      score: this.state.score + 1
+    });
+  }
+
+  setGameOver() {
+    this.setState({
+      score: 0,
+      screen: 'gameOver'
+    });
+  }
+
   renderScreen() {
     switch (this.state.screen) {
       case 'game': {
-        return <Game></Game>
+        return (
+          <Game
+            setGameOver={() => this.setGameOver()}
+            incrementScore={() => this.incrementScore()}
+          ></Game>
+        )
       }
       case 'settings': {
-        return <Settings></Settings>
+        return (
+          <Settings
+            setWall={(wall) => this.setWall(wall)}
+            setSpeed={(speed) => this.setSpeed(speed)}
+            goBack={() => this.navigate('')}
+          ></Settings>
+        )
       }
       case 'gameOver': {
-        return <GameOver></GameOver>
+        return (
+          <GameOver
+            startNewGame={() => this.navigate('game')}
+            navigateSettings={() => this.navigate('settings')}
+          ></GameOver>
+        )
       }
       default: {
-        return <Title></Title>
+        return (
+          <Title 
+            startGame={() => this.navigate('game')}
+            navigateSettings={() => this.navigate('settings')}
+          ></Title>
+        )
       }
     }
   }

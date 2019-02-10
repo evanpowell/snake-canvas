@@ -1,29 +1,24 @@
 
 .main-title {
   color: #0bdd1d;
-
-  animation-name: mainTitle;
-  animation-duration: 1s;
-  animation-direction: linear;
-  animation-iteration-count: infinite;
-  animation-fill-mode: both;
-  animation-direction: alternate;
+  animation: mainTitle 1s linear infinite;
+  -webkit-animation: mainTitle 1s linear infinite;
 }
 
 @keyframes mainTitle {
-  0% {
-    font-size: 28px;
+  50% {
+    transform: scale(1.08, 1.08);
   }
   100% {
-    font-size: 36px;
+    transform: scale(1.0, 1.0);
   }
 }
 
 @-webkit-keyframes mainTitle {
-  0% {
-    scale: 1;
-  }
   50% {
-    scale: 1.3;
+    -webkit-transform: scale(1.08, 1.08);
+  }
+  100% {
+    -webkit-transform: scale(1.0, 1.0);
   }
 }

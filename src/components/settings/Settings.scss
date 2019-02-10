@@ -1,0 +1,28 @@
+.options {
+  padding: 0;
+
+  &--option {
+    margin-bottom: 25px;
+    
+    p {
+      margin-bottom: 10px;
+    }
+
+    span {
+      padding: 5px;
+
+      &.selected {
+        background-color: #efefef;
+        color: #111;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+  }
+}
