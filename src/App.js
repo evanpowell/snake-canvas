@@ -11,7 +11,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      screen: '',
+      screen: 'game',
       score: 0,
       wall: true,
       speed: 2
@@ -42,6 +42,12 @@ class App extends Component {
     });
   }
 
+  resetScore() {
+    this.setState({
+      score: 0
+    });
+  }
+
   setGameOver() {
     this.setState({
       score: 0,
@@ -54,8 +60,11 @@ class App extends Component {
       case 'game': {
         return (
           <Game
+            wall={this.state.wall}
+            speed={this.state.speed}
             setGameOver={() => this.setGameOver()}
             incrementScore={() => this.incrementScore()}
+            resetScore={() => this.resetScore()}
           ></Game>
         )
       }
@@ -74,7 +83,7 @@ class App extends Component {
         return (
           <GameOver
             startNewGame={() => this.navigate('game')}
-            navigateSettings={() => this.navigate('settings')}
+            navigateTitle={() => this.navigate('')}
           ></GameOver>
         )
       }
@@ -91,8 +100,13 @@ class App extends Component {
   
   render() {
     return (
-      <div className="container">
-        { this.renderScreen() }
+      <div>
+        <div className="score-bar">
+          <p className="score-bar__score">Score: {this.state.score}</p>
+        </div>
+        <div className="container">
+          { this.renderScreen() }
+        </div>
       </div>
     );
   }

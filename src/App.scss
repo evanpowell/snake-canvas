@@ -1,3 +1,18 @@
+.score-bar {
+  margin: 0 auto;
+  width: 400px;
+  text-align: right;
+
+  &__score {
+    font-size: 12px;
+    border: 1px solid #111;
+    border-bottom: none;
+    background-color: #efefef;
+    display: inline-block;
+    padding: 3px 5px;
+  }
+}
+
 .container {
   margin: 0 auto;
   width: 400px;
