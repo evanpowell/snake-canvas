@@ -9,6 +9,7 @@
     "build-dev": "webpack -p --config ./webpack.config.js --mode development",
     "build-prod": "webpack -p --config ./webpack.config.js --mode production",
     "start": "node server/index.js",
+    "heroku-prebuild": "npm install --dev",
     "deploy-start": "npm run build-prod && npm run start"
   },
   "author": "Evan Powell",
