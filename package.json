@@ -8,7 +8,8 @@
     "dev-server": "webpack-dev-server --mode development",
     "build-dev": "webpack -p --config ./webpack.config.js --mode development",
     "build-prod": "webpack -p --config ./webpack.config.js --mode production",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "deploy-start": "npm run build-prod && npm run start"
   },
   "author": "Evan Powell",
   "license": "ISC",
