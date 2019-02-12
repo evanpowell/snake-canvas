@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
 import './Game.scss';
-import startGame from './canvas2';
+import startGame from './canvas';
 
 class Game extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    
   }
 
   componentDidMount() {
@@ -14,8 +15,9 @@ class Game extends Component {
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
     canvas.focus();
+    canvas.tabIndex = 1;
 
-    startGame(canvas, ctx, this.props.wall, this.props.speed, this.props.setGameOver);
+    startGame(canvas, ctx, this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
   }
 
   render() {

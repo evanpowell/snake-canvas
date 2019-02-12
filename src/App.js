@@ -11,7 +11,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      screen: 'game',
+      screen: '',
       score: 0,
       wall: true,
       speed: 2
@@ -50,7 +50,6 @@ class App extends Component {
 
   setGameOver() {
     this.setState({
-      score: 0,
       screen: 'gameOver'
     });
   }
