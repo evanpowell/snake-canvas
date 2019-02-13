@@ -103,7 +103,7 @@ class App extends Component {
         <div className="score-bar">
           <p className="score-bar__score">Score: {this.state.score}</p>
         </div>
-        <div className="container">
+        <div id="container">
           { this.renderScreen() }
         </div>
       </div>

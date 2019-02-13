@@ -1,6 +1,9 @@
 
 .main-title {
   color: #0bdd1d;
+  width: fit-content;
+  margin: 0 auto;
+
   animation: mainTitle 1s linear infinite;
   -webkit-animation: mainTitle 1s linear infinite;
 }

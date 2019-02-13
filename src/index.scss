@@ -10,3 +10,9 @@ body {
   font-family: 'Press Start 2P', cursive;
   background: #aaa;
 }
+
+@media (max-width: 399px) {
+  body {
+    padding-top: 30px;
+  }
+}
