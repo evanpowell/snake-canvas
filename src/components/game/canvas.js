@@ -43,7 +43,8 @@ const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
   updateFood();
 
   canvas.onkeydown = (event = window.event) => {
-    changeDirection(event.keyCode);
+    event.preventDefault();
+    changeDirection(event.key);
   }
 
   mainLoop();
@@ -66,13 +67,13 @@ const checkBlock = (x, y, a, b) => {
 
 const changeDirection = (key) => {
   const { current } = snakeDirection;
-  if (key === 38 && current !== 2) {
+  if (key === 'ArrowUp' && current !== 2) {
     snakeDirection.next = 0;
-  } else if (key === 39 && current !== 3) {
+  } else if (key === 'ArrowRight' && current !== 3) {
     snakeDirection.next = 1;
-  } else if (key === 40 && current !== 0) {
+  } else if (key === 'ArrowDown' && current !== 0) {
     snakeDirection.next = 2;
-  } else if (key === 37 && current !== 1) {
+  } else if (key === 'ArrowLeft' && current !== 1) {
     snakeDirection.next = 3;
   }
 }

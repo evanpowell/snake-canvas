@@ -1,0 +1,42 @@
+.controls {
+  display: none;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  margin-top: 30px;
+  position: relative;
+
+  &__btn {
+    position: absolute;
+
+    &--up {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    &--right {
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    &--down {
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &--left {
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+@media (max-width: 399px) {
+  .controls {
+    display: block;
+  }
+}

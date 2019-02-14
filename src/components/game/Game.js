@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import './Game.scss';
 import startGame from './canvas';
 
+import Controls from '../controls/Controls';
+
 class Game extends Component {
   constructor(props) {
     super(props);
@@ -25,9 +27,12 @@ class Game extends Component {
 
   render() {
     return (
-      <canvas
-        id="game"
-      ></canvas>
+      <div style={{width: '100%', height: '100%'}}>
+        <canvas
+          id="game"
+        ></canvas>
+        <Controls></Controls>
+      </div>
     );
   }
 }
