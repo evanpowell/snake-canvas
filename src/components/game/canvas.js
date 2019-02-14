@@ -1,9 +1,32 @@
+let canvas;
+let ctx;
+let blockSize;
+
 const snake = [];
 const snakeDirection = {};
 const food = {};
 
-const startGame = (canvas, ctx, wall, speedSetting, gameOver, incScore) => {
+let wall;
+let speed;
+
+let gameOver;
+let incScore;
+
+const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
+  wall = wallSetting;
+  gameOver = gameOverCb;
+  incScore = incScoreCb;
+  speed = [150, 100, 50][speedSetting - 1];
+  canvas = document.getElementById('game');
+  
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetWidth;
   canvas.tabIndex = 1000;
+
+  blockSize = canvas.width / 40;
+ 
+  ctx = canvas.getContext('2d');
+  
   canvas.focus();
 
   snake.length = 0;
@@ -17,23 +40,21 @@ const startGame = (canvas, ctx, wall, speedSetting, gameOver, incScore) => {
     });
   }
 
-  updateFood(canvas);
+  updateFood();
 
   canvas.onkeydown = (event = window.event) => {
     changeDirection(event.keyCode);
   }
 
-  const speed = [150, 100, 50][speedSetting - 1];
-
-  mainLoop(canvas, ctx, wall, speed, gameOver, incScore);
+  mainLoop();
 }
 
-const updateFood = (canvas) => {
-  food.x = Math.floor(Math.random() * ((canvas.width / 10) - 1));
-  food.y = Math.floor(Math.random() * ((canvas.height / 10) - 1));
+const updateFood = () => {
+  food.x = Math.floor(Math.random() * ((canvas.width / blockSize) - 1));
+  food.y = Math.floor(Math.random() * ((canvas.height / blockSize) - 1));
   for (var i = 0; i < snake.length; i++) {
     if (checkBlock(food.x, food.y, snake[i].x, snake[i].y)) {
-      updateFood(canvas);
+      updateFood();
       return;
     }
   }
@@ -56,10 +77,10 @@ const changeDirection = (key) => {
   }
 }
 
-const mainLoop = (canvas, ctx, wall, speed, gameOver, incScore) => {
+const mainLoop = () => {
   moveSnake();
 
-  if (!checkWallAndAutophagy(wall, canvas)) {
+  if (!checkWallAndAutophagy()) {
     gameOver();
     return;
   };
@@ -67,7 +88,7 @@ const mainLoop = (canvas, ctx, wall, speed, gameOver, incScore) => {
   if (checkSnakeEatsFood()) {
     growSnake();
     incScore();
-    updateFood(canvas, ctx);
+    updateFood();
   };
 
   ctx.beginPath();
@@ -75,13 +96,13 @@ const mainLoop = (canvas, ctx, wall, speed, gameOver, incScore) => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   for (var i = 0; i < snake.length; i++) {
-    activeDot(snake[i].x, snake[i].y, ctx);
+    activeDot(snake[i].x, snake[i].y);
   }
 
-  activeDot(food.x, food.y, ctx, true);
+  activeDot(food.x, food.y, true);
 
   setTimeout(() => {
-    mainLoop(canvas, ctx, wall, speed, gameOver, incScore);
+    mainLoop();
   }, speed);
 }
 
@@ -121,9 +142,9 @@ const moveSnake = () => {
   });
 }
 
-const checkWallAndAutophagy = (wall, canvas) => {
+const checkWallAndAutophagy = () => {
   if (wall) {
-    if (snake[0].x < 0 || snake[0].x === canvas.width / 10 || snake[0].y < 0 || snake[0].y === canvas.height / 10) {
+    if (snake[0].x < 0 || snake[0].x === canvas.width / blockSize || snake[0].y < 0 || snake[0].y === canvas.height / blockSize) {
       return false;
     }
   }
@@ -131,16 +152,16 @@ const checkWallAndAutophagy = (wall, canvas) => {
   for (var i = 0; i < snake.length; i++) {
     if (!wall) {
       if (snake[i].x < 0) {
-        snake[i].x = snake[i].x + (canvas.width / 10);
+        snake[i].x = snake[i].x + (canvas.width / blockSize);
       }
-      if (snake[i].x === canvas.width / 10) {
-        snake[i].x = snake[i].x - (canvas.width / 10);
+      if (snake[i].x === canvas.width / blockSize) {
+        snake[i].x = snake[i].x - (canvas.width / blockSize);
       }
       if (snake[i].y < 0) {
-        snake[i].y = snake[i].y + (canvas.height / 10);
+        snake[i].y = snake[i].y + (canvas.height / blockSize);
       }
-      if (snake[i].y === canvas.height / 10) {
-        snake[i].y = snake[i].y - (canvas.height / 10);
+      if (snake[i].y === canvas.height / blockSize) {
+        snake[i].y = snake[i].y - (canvas.height / blockSize);
       }
     }
     if (i !== 0 && snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
@@ -153,14 +174,6 @@ const checkWallAndAutophagy = (wall, canvas) => {
 
 const checkSnakeEatsFood = () => {
   return checkBlock(snake[0].x, snake[0].y, food.x, food.y);
-  // if (checkBlock(snake[0].x, snake[0].y, food.x, food.y)) {
-  //   snake.push({
-  //     x: snake[0].x,
-  //     y: snake[0].y
-  //   });
-  //   updateFood(canvas);
-    
-  // }
 }
 
 const growSnake = () => {
@@ -170,14 +183,14 @@ const growSnake = () => {
   });
 }
 
-const activeDot = (x, y, ctx, isFood = false) => {
+const activeDot = (x, y, isFood = false) => {
   if (isFood) {
     ctx.fillStyle = "#e00606";
   } else {
     ctx.fillStyle = "#0bdd1d";
   }
 
-  ctx.fillRect(x * 10, y * 10, 10, 10);
+  ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
 }
 
 

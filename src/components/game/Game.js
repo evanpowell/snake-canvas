@@ -20,7 +20,7 @@ class Game extends Component {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetWidth;
 
-    startGame(canvas, ctx, this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
+    startGame(this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
   }
 
   render() {
