@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 
 import './Game.scss';
 import startGame from './canvas';
-
 import Controls from '../controls/Controls';
+import checkMobile from './checkMobile';
 
 class Game extends Component {
   constructor(props) {
     super(props);
     
+    this.checkMobile = checkMobile;
+    this.startGame = startGame;
   }
 
   componentDidMount() {
@@ -21,8 +23,20 @@ class Game extends Component {
 
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetWidth;
+    
+    if (this.checkMobile()) {
+      this.showControls();
+    }
 
-    startGame(this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
+    this.startGame(this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
+  }
+
+  showControls() {
+    const controls = document.querySelector('.controls');
+    
+    if (controls) {
+      controls.style.display = 'block';
+    }
   }
 
   render() {
