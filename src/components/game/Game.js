@@ -17,6 +17,9 @@ class Game extends Component {
     canvas.focus();
     canvas.tabIndex = 1;
 
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetWidth;
+
     startGame(canvas, ctx, this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
   }
 
@@ -24,8 +27,6 @@ class Game extends Component {
     return (
       <canvas
         id="game"
-        width="400"
-        height="400"
       ></canvas>
     );
   }
