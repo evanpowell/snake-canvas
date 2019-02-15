@@ -23,7 +23,7 @@ class Game extends Component {
 
     let isHorizontalMobile = false;
 
-    if (!checkMobile()) {
+    if (checkMobile()) {
       if (document.querySelector('body').offsetWidth <= 420) {
         this.setState({
           isVerticalMobile: true
