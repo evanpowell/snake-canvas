@@ -14,19 +14,19 @@ const Controls = (props) => {
       <button 
         className="controls__btn controls__btn--up"
         onClick={() => changeDirection('ArrowUp')}
-      >UP</button>
+      >&uarr;</button>
       <button 
         className="controls__btn controls__btn--right"
         onClick={() => changeDirection('ArrowRight')}
-      >RIGHT</button>
+      >&rarr;</button>
       <button 
         className="controls__btn controls__btn--down"
         onClick={() => changeDirection('ArrowDown')}
-      >DOWN</button>
+      >&darr;</button>
       <button 
         className="controls__btn controls__btn--left"
         onClick={() => changeDirection('ArrowLeft')}
-      >LEFT</button>
+      >&larr;</button>
     </div>
   );
 }

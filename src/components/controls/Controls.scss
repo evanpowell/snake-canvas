@@ -1,5 +1,4 @@
 .controls {
-  display: none;
   width: 200px;
   height: 200px;
   margin: 0 auto;
@@ -8,6 +7,11 @@
 
   &__btn {
     position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    background-color: #111;
+    color: #efefef;
 
     &--up {
       top: 0;
@@ -32,11 +36,13 @@
       left: 0;
       transform: translateY(-50%);
     }
-  }
-}
 
-@media (max-width: 420px) {
-  .controls {
-    display: block;
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      background: linear-gradient(#222, #333);
+    }
   }
 }

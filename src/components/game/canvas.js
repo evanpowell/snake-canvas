@@ -17,8 +17,8 @@ const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
   gameOver = gameOverCb;
   incScore = incScoreCb;
   speed = [150, 100, 50][speedSetting - 1];
+
   canvas = document.getElementById('game');
-  
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetWidth;
   canvas.tabIndex = 1000;
