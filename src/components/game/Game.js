@@ -11,43 +11,59 @@ class Game extends Component {
     
     this.checkMobile = checkMobile;
     this.startGame = startGame;
+
+    this.state = {
+      isVerticalMobile: false,
+      isHorizontalMobile: false
+    }
   }
 
   componentDidMount() {
     this.props.resetScore();
 
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
-    canvas.focus();
-    canvas.tabIndex = 1;
+    let isHorizontalMobile = false;
 
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetWidth;
-    
-    if (this.checkMobile()) {
-      this.showControls();
+    if (checkMobile()) {
+      if (document.querySelector('body').offsetWidth <= 420) {
+        this.setState({
+          isVerticalMobile: true
+        });
+      } else {
+        isHorizontalMobile = true;
+        document.querySelector('.score-bar').style.display = 'none';
+        this.setState({
+          isHorizontalMobile: true
+        });
+      }
     }
-
-    this.startGame(this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
-  }
-
-  showControls() {
-    const controls = document.querySelector('.controls');
     
-    if (controls) {
-      controls.style.display = 'block';
+    if (!isHorizontalMobile) {
+      this.startGame(this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
     }
   }
 
   render() {
-    return (
-      <div style={{width: '100%', height: '100%'}}>
-        <canvas
-          id="game"
-        ></canvas>
-        <Controls></Controls>
-      </div>
-    );
+    let controls;
+
+    if (this.state.isVerticalMobile) {
+      controls = <Controls />
+    }
+
+    if (this.state.isHorizontalMobile) {
+      return (
+        <div className="mobile-error">
+          <h3 className="mobile-error__title">Screen must be vertically oriented to play on mobile devices</h3>
+          <p className="mobile-error__sub">Please rotate the screen and refresh the page</p>
+        </div>
+      );
+    } else {
+      return (
+        <div className="screen">
+          <canvas id="game"></canvas>
+          { controls }
+        </div>
+      );
+    }
   }
 }
 
