@@ -12,11 +12,14 @@ let speed;
 let gameOver;
 let incScore;
 
+let isGameOver;
+
 const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
   wall = wallSetting;
   gameOver = gameOverCb;
   incScore = incScoreCb;
   speed = [150, 100, 50][speedSetting - 1];
+  isGameOver = false;
 
   canvas = document.getElementById('game');
   canvas.width = canvas.offsetWidth;
@@ -81,26 +84,12 @@ const changeDirection = (key) => {
 const mainLoop = () => {
   moveSnake();
 
-  if (!checkWallAndAutophagy()) {
-    gameOver();
+  if (isGameOver) {
+    freezeGame();
     return;
-  };
-
-  if (checkSnakeEatsFood()) {
-    growSnake();
-    incScore();
-    updateFood();
-  };
-
-  ctx.beginPath();
-  ctx.fillStyle = '#111';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  for (var i = 0; i < snake.length; i++) {
-    activeDot(snake[i].x, snake[i].y);
   }
 
-  activeDot(food.x, food.y, true);
+  render();
 
   setTimeout(() => {
     mainLoop();
@@ -135,18 +124,28 @@ const moveSnake = () => {
       break;
     }
   }
-  
-  snake.pop();
-  snake.unshift({
-    x,
-    y
-  });
+
+  if (checkWallAndAutophagy(x, y)) {
+    isGameOver = true;
+  } else {
+    if (checkSnakeEatsFood(x, y)) {
+      incScore();
+      updateFood();
+    } else {
+      snake.pop();
+    }
+    
+    snake.unshift({
+      x,
+      y
+    });
+  }
 }
 
-const checkWallAndAutophagy = () => {
+const checkWallAndAutophagy = (x, y) => {
   if (wall) {
-    if (snake[0].x < 0 || snake[0].x === canvas.width / blockSize || snake[0].y < 0 || snake[0].y === canvas.height / blockSize) {
-      return false;
+    if (x < 0 || x === canvas.width / blockSize || y < 0 || y === canvas.height / blockSize) {
+      return true;
     }
   }
   
@@ -165,35 +164,69 @@ const checkWallAndAutophagy = () => {
         snake[i].y = snake[i].y - (canvas.height / blockSize);
       }
     }
-    if (i !== 0 && snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
-      return false;
+    if (i !== 0 && x === snake[i].x && y === snake[i].y) {
+      return true;
     }
   }
 
-  return true;
+  return false;
 }
 
-const checkSnakeEatsFood = () => {
-  return checkBlock(snake[0].x, snake[0].y, food.x, food.y);
+const checkSnakeEatsFood = (x, y) => {
+  return checkBlock(x, y, food.x, food.y);
 }
 
-const growSnake = () => {
-  snake.push({
-    x: snake[0].x,
-    y: snake[0].y
-  });
+const render = () => {
+  ctx.beginPath();
+  
+  fillScreen();
+
+  for (var i = 0; i < snake.length; i++) {
+    activeDot(snake[i].x, snake[i].y);
+  }
+
+  activeDot(food.x, food.y, true);
 }
 
-const activeDot = (x, y, isFood = false) => {
+const activeDot = (x, y, isFood = false, isGameOver = false) => {
   if (isFood) {
-    ctx.fillStyle = "#e00606";
+    if (isGameOver) {
+      ctx.fillStyle = '#d8d8d8'
+    } else {
+      ctx.fillStyle = '#e00606';
+    }
   } else {
-    ctx.fillStyle = "#0bdd1d";
+    if (isGameOver) {
+      ctx.fillStyle = '#cecece';
+    } else {
+      ctx.fillStyle = '#0bdd1d';
+    }
   }
 
   ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
 }
 
+const fillScreen = (isOverlay) => {
+  if (isOverlay) {
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = '#dd940b';
+    ctx.fillRect(0,0, canvas.width, canvas.height);
+    ctx.globalAlpha = 1.0;
+  } else {
+    ctx.fillStyle = '#111';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+}
 
+const freezeGame = () => {
+  ctx.beginPath();
+  fillScreen();
+  for (var i = 0; i < snake.length; i++) {
+    activeDot(snake[i].x, snake[i].y, false, true);
+  }
+  activeDot(food.x, food.y, true, true);
+
+  fillScreen(true);
+}
 
 export default startGame;
