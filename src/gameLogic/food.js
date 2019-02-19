@@ -1,3 +1,5 @@
+import { timingSafeEqual } from "crypto";
+
 class Food {
   constructor(config) {
     this.config = config;
@@ -19,7 +21,7 @@ class Food {
     this.destroy();
     this.x = x;
     this.y = y;
-    renderBlock(x * blockSize + 1, y * blockSize + 1, blockSize - 2, blockSize - 2, foodColor);
+    renderBlock(this.getFoodRect(), foodColor);
   }
 
   getFoodRect() {
@@ -33,8 +35,7 @@ class Food {
   }
 
   destroy() {
-    const { blockSize, renderBlock, screenColor } = this.config;
-    renderBlock(this.x * blockSize + 1, this.y * blockSize + 1, blockSize - 2, blockSize - 2, screenColor);
+    this.config.renderBlock(this.getFoodRect(), this.config.screenColor);
   }
 }
 

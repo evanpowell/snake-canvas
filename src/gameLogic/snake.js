@@ -18,17 +18,18 @@ class Snake {
   }
 
   init() {
-    const { blockSize, snakeColor } = this.config;
     let snakeBlock;
     for (let i = 4; i >= 0; i--) {
       snakeBlock = new SnakeBlock(i, 15, 'right');
       this.blocks.push(snakeBlock);
-      if (i === 0) {
-        this.config.renderBlock(0 * blockSize + 1, 15 * blockSize + 1, blockSize - 2, blockSize - 2, snakeColor);
-      } else {
-        this.renderSnakeBlock(snakeBlock);
-      }
+      this.renderSnakeBlock(snakeBlock);
     }
+    this.config.renderBlock({
+      left: 0,
+      top: 15 * this.blockSize,
+      width: 1,
+      height: this.blockSize
+    }, this.screenColor);
   }
 
   move() {
@@ -108,21 +109,6 @@ class Snake {
     return false;
   }
 
-  /* snake needs to be skinny by one pixel on each side
-  
-  renderSnakeBlock
-    block is initially skinny by one pixel on each side
-    add 2 pixels behind it based on direction of block
-
-  destroy tail
-    based on direction of the new tail
-    remove full width and height PLUS the 2 pixels
-
-  on init
-    create full snake
-      on tail piece, don't add extra pixels behind
-  */
-
   advanceHead() {
     this.renderSnakeBlock(this.blocks[0]);
   }
@@ -130,16 +116,20 @@ class Snake {
   advanceTail() {
     const { blockSize, screenColor, renderBlock } = this.config;
     const { x, y } = this.blocks.pop();
-    renderBlock(x * blockSize - 1, y * blockSize - 1, blockSize + 2, blockSize + 2, screenColor);
+    renderBlock({
+      left: x * blockSize - 1,
+      top: y * blockSize - 1,
+      width: blockSize + 2,
+      height: blockSize + 2
+    }, screenColor);
   }
 
-  renderSnakeBlock(snakeBlock) {
-    let { left, top, width, height } = this.getSnakeBlockRect(snakeBlock);
-    this.config.renderBlock(left, top, width, height, this.config.snakeColor);
+  renderSnakeBlock(snakeBlock, color = this.config.snakeColor) {
+    this.config.renderBlock(this.getSnakeBlockRect(snakeBlock), color);
   }
 
   getSnakeBlockRect({ x, y, direction }, isDestroy) {
-    const { blockSize } = this.config
+    const { blockSize } = this.config;
     let top = y * blockSize + 1,
       left = x * blockSize + 1,
       width = blockSize - 2,

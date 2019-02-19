@@ -26,7 +26,7 @@ const config = {
   overlay: {
     opacity: 0.25
   },
-  renderBlock: (x, y, width, height, color) => {
+  renderBlock: ({ left:x, top:y, width, height }, color) => {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, width, height);
   },
@@ -61,7 +61,7 @@ const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
     wall,
     renderBlock: config.renderBlock,
     screenColor: config.color.screen,
-    snakeColor: config.color.snake
+    snakeColor: config.color.snake,
   });
 
   food = new Food({
@@ -82,10 +82,6 @@ const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
       snake.changeDirection(event.key);
     }
   })
-
-  // canvas.onkeydown = (event = window.event) => {
-  //   snake.changeDirection(event.key);
-  // }
 
   mainLoop();
 }
@@ -113,8 +109,6 @@ const mainLoop = () => {
 }
 
 const checkSnakeEatsFood = () => {
-  if (config.checkBlock(snake.blocks[0].x, snake.blocks[0].y, food.x, food.y)) {
-  };
   return config.checkBlock(snake.blocks[0].x, snake.blocks[0].y, food.x, food.y);
 }
 
@@ -131,19 +125,14 @@ const fillScreen = (isOverlay) => {
 }
 
 const freezeGame = () => {
-  // ctx.beginPath();
-  // fillScreen();
-  let snakeRect;
-  let foodRect;
   const time = 2000 / snake.blocks.length;
 
   let i = 1;
   const turnSnakeWhite = setInterval(() => {
-    snakeRect = snake.getSnakeBlockRect(snake.blocks[i]);
-    config.renderBlock(snakeRect.left, snakeRect.top, snakeRect.width, snakeRect.height, '#cecece');
-
-    i += 1
-    if (i >= snake.blocks.length) {
+    if (i < snake.blocks.length) {
+      snake.renderSnakeBlock(snake.blocks[i], '#cecece');
+      i += 1
+    } else {
       let { x, y, direction } = snake.blocks[snake.blocks.length - 1]
       switch (direction) {
         case 'up': {
@@ -163,28 +152,17 @@ const freezeGame = () => {
           break;
         }
       }
-
-      config.renderBlock(x * blockSize - 1, y * blockSize - 1, blockSize + 2, blockSize + 2, '#111');
+  
+      config.renderBlock({
+        left: x * blockSize - 1,
+        top: y* blockSize - 1,
+        width: blockSize + 2,
+        height: blockSize + 2
+      }, '#111');
       // fillScreen(true);
       clearInterval(turnSnakeWhite);
     }
   }, time);
-  
-  // foodRect = food.getFoodRect();
-  // config.renderBlock(foodRect.left, foodRect.top, foodRect.width, foodRect. height, '#cecece');
-
-
-  // fillScreen(true);
 }
-
-let index = 0;
-
-const turnSnakeRed = setInterval
-
-const changeSnakeColor = (i) => {
-  snakeRect = snake.getSnakeBlockRect(snakeBlock[i]);
-  config.renderBlock(snakeRect.left, snakeRect.top, snakeRect.width, snakeRect.height, '#cecece');
-}
-
 
 export default startGame;
