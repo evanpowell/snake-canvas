@@ -1,10 +1,12 @@
+import Snake from '../../gameLogic/snake';
+import Food from '../../gameLogic/food';
+
 let canvas;
 let ctx;
 let blockSize;
 
-const snake = [];
-const snakeDirection = {};
-const food = {};
+let snake;
+let food;
 
 let wall;
 let speed;
@@ -13,6 +15,25 @@ let gameOver;
 let incScore;
 
 let isGameOver;
+
+const config = {
+  color: {
+    snake: '#0bdd1d',
+    food: '#e00606',
+    screen: '#111',
+    overlay: '#dd940b',
+  },
+  overlay: {
+    opacity: 0.25
+  },
+  renderBlock: (x, y, width, height, color) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, width, height);
+  },
+  checkBlock: (x, y, a, b) => {
+    return x === a && y === b;
+  }
+}
 
 const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
   wall = wallSetting;
@@ -25,185 +46,76 @@ const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetWidth;
   canvas.tabIndex = 1000;
-
-  blockSize = canvas.width / 40;
- 
-  ctx = canvas.getContext('2d');
-  
   canvas.focus();
 
-  snake.length = 0;
-  snakeDirection.current = 1;
-  snakeDirection.next = 1;
+  ctx = canvas.getContext('2d');
+  fillScreen();
+  
+  blockSize = canvas.width / 40;
+  
+  ctx.beginPath();
 
-  for (var i = 4; i >= 0; i--) {
-    snake.push({
-      x: i,
-      y: 15
-    });
-  }
+  snake = new Snake({
+    canvas,
+    blockSize,
+    wall,
+    renderBlock: config.renderBlock,
+    screenColor: config.color.screen,
+    snakeColor: config.color.snake
+  });
 
-  updateFood();
+  food = new Food({
+    canvas,
+    blockSize,
+    snakeBlocks: snake.blocks,
+    checkBlock: config.checkBlock,
+    foodColor: config.color.food,
+    screenColor: config.color.screen,
+    checkBlock: config.checkBlock,
+    renderBlock: config.renderBlock
+  });
 
-  canvas.onkeydown = (event = window.event) => {
-    event.preventDefault();
-    changeDirection(event.key);
-  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key.includes('Arrow')) {
+      event.preventDefault();
+      snake.changeDirection(event.key);
+    }
+  })
+
+  // canvas.onkeydown = (event = window.event) => {
+  //   snake.changeDirection(event.key);
+  // }
 
   mainLoop();
 }
 
-const updateFood = () => {
-  food.x = Math.floor(Math.random() * ((canvas.width / blockSize) - 1));
-  food.y = Math.floor(Math.random() * ((canvas.height / blockSize) - 1));
-  for (var i = 0; i < snake.length; i++) {
-    if (checkBlock(food.x, food.y, snake[i].x, snake[i].y)) {
-      updateFood();
-      return;
-    }
-  }
-}
-
-const checkBlock = (x, y, a, b) => {
-  return x === a && y === b;
-}
-
-const changeDirection = (key) => {
-  const { current } = snakeDirection;
-  if (key === 'ArrowUp' && current !== 2) {
-    snakeDirection.next = 0;
-  } else if (key === 'ArrowRight' && current !== 3) {
-    snakeDirection.next = 1;
-  } else if (key === 'ArrowDown' && current !== 0) {
-    snakeDirection.next = 2;
-  } else if (key === 'ArrowLeft' && current !== 1) {
-    snakeDirection.next = 3;
-  }
-}
-
 const mainLoop = () => {
-  moveSnake();
+  snake.move();
 
-  if (isGameOver) {
+  if (snake.checkDeath()) {
     freezeGame();
     return;
   }
 
-  render();
+  if (checkSnakeEatsFood()) {
+    incScore();
+    food.place();
+  } else {
+    snake.advanceTail();
+  }
+  
+  snake.advanceHead();
 
   setTimeout(() => {
     mainLoop();
   }, speed);
 }
 
-const moveSnake = () => {
-  let x = snake[0].x;
-  let y = snake[0].y;
-    
-  snakeDirection.current = snakeDirection.next;
-  
-  // 0 - Up, 1 - Right, 2 - Down, 3 - Left
-  switch (snakeDirection.current) {
-    case 0: {
-      y--;
-      break;
-    }
-    
-    case 1: {
-      x++;
-      break;
-    }
-  
-    case 2: {
-      y++;
-      break;
-    }
-  
-    default: {
-      x--;
-      break;
-    }
-  }
-
-  if (checkWallAndAutophagy(x, y)) {
-    isGameOver = true;
-  } else {
-    if (checkSnakeEatsFood(x, y)) {
-      incScore();
-      updateFood();
-    } else {
-      snake.pop();
-    }
-    
-    snake.unshift({
-      x,
-      y
-    });
-  }
-}
-
-const checkWallAndAutophagy = (x, y) => {
-  if (wall) {
-    if (x < 0 || x === canvas.width / blockSize || y < 0 || y === canvas.height / blockSize) {
-      return true;
-    }
-  }
-  
-  for (var i = 0; i < snake.length; i++) {
-    if (!wall) {
-      if (snake[i].x < 0) {
-        snake[i].x = snake[i].x + (canvas.width / blockSize);
-      }
-      if (snake[i].x === canvas.width / blockSize) {
-        snake[i].x = snake[i].x - (canvas.width / blockSize);
-      }
-      if (snake[i].y < 0) {
-        snake[i].y = snake[i].y + (canvas.height / blockSize);
-      }
-      if (snake[i].y === canvas.height / blockSize) {
-        snake[i].y = snake[i].y - (canvas.height / blockSize);
-      }
-    }
-    if (i !== 0 && x === snake[i].x && y === snake[i].y) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-const checkSnakeEatsFood = (x, y) => {
-  return checkBlock(x, y, food.x, food.y);
-}
-
-const render = () => {
-  ctx.beginPath();
-  
-  fillScreen();
-
-  for (var i = 0; i < snake.length; i++) {
-    activeDot(snake[i].x, snake[i].y);
-  }
-
-  activeDot(food.x, food.y, true);
-}
-
-const activeDot = (x, y, isFood = false, isGameOver = false) => {
-  if (isFood) {
-    if (isGameOver) {
-      ctx.fillStyle = '#d8d8d8'
-    } else {
-      ctx.fillStyle = '#e00606';
-    }
-  } else {
-    if (isGameOver) {
-      ctx.fillStyle = '#cecece';
-    } else {
-      ctx.fillStyle = '#0bdd1d';
-    }
-  }
-
-  ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
+const checkSnakeEatsFood = () => {
+  if (config.checkBlock(snake.blocks[0].x, snake.blocks[0].y, food.x, food.y)) {
+  };
+  return config.checkBlock(snake.blocks[0].x, snake.blocks[0].y, food.x, food.y);
 }
 
 const fillScreen = (isOverlay) => {
@@ -219,14 +131,60 @@ const fillScreen = (isOverlay) => {
 }
 
 const freezeGame = () => {
-  ctx.beginPath();
-  fillScreen();
-  for (var i = 0; i < snake.length; i++) {
-    activeDot(snake[i].x, snake[i].y, false, true);
-  }
-  activeDot(food.x, food.y, true, true);
+  // ctx.beginPath();
+  // fillScreen();
+  let snakeRect;
+  let foodRect;
+  const time = 2000 / snake.blocks.length;
 
-  fillScreen(true);
+  let i = 1;
+  const turnSnakeWhite = setInterval(() => {
+    snakeRect = snake.getSnakeBlockRect(snake.blocks[i]);
+    config.renderBlock(snakeRect.left, snakeRect.top, snakeRect.width, snakeRect.height, '#cecece');
+
+    i += 1
+    if (i >= snake.blocks.length) {
+      let { x, y, direction } = snake.blocks[snake.blocks.length - 1]
+      switch (direction) {
+        case 'up': {
+          y += 1;
+          break;
+        }
+        case 'right': {
+          x -= 1;
+          break;
+        }
+        case 'down': {
+          y -= 1;
+          break;
+        }
+        default: {
+          x += 1;
+          break;
+        }
+      }
+
+      config.renderBlock(x * blockSize - 1, y * blockSize - 1, blockSize + 2, blockSize + 2, '#111');
+      // fillScreen(true);
+      clearInterval(turnSnakeWhite);
+    }
+  }, time);
+  
+  // foodRect = food.getFoodRect();
+  // config.renderBlock(foodRect.left, foodRect.top, foodRect.width, foodRect. height, '#cecece');
+
+
+  // fillScreen(true);
 }
+
+let index = 0;
+
+const turnSnakeRed = setInterval
+
+const changeSnakeColor = (i) => {
+  snakeRect = snake.getSnakeBlockRect(snakeBlock[i]);
+  config.renderBlock(snakeRect.left, snakeRect.top, snakeRect.width, snakeRect.height, '#cecece');
+}
+
 
 export default startGame;
