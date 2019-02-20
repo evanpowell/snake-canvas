@@ -46,8 +46,15 @@ class Game extends Component {
     }
   }
 
+  playAgain() {
+    this.props.resetScore();
+    this.setState({
+      isGameOver: false
+    })
+    this.startGame(this.props.wall, this.props.speed, this.gameOver, this.props.incrementScore);
+  }
+
   gameOver() {
-    console.log('game over');
     this.setState({
       isGameOver: true
     });
@@ -71,7 +78,7 @@ class Game extends Component {
       return (
         <div className="screen">
           <canvas id="game"></canvas>
-          { this.state.isGameOver && <GameOver navigate={this.props.navigate} /> }
+          { this.state.isGameOver && <GameOver navigate={this.props.navigate} playAgain={() => this.playAgain()} /> }
           { controls }
         </div>
       );
