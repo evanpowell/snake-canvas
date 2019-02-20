@@ -5,7 +5,6 @@ import './App.scss';
 import Title from './components/title/Title';
 import Settings from './components/settings/Settings';
 import Game from './components/game/Game';
-import GameOver from './components/gameOver/GameOver';
 
 class App extends Component {
   constructor(props) {
@@ -64,6 +63,7 @@ class App extends Component {
             setGameOver={() => this.setGameOver()}
             incrementScore={() => this.incrementScore()}
             resetScore={() => this.resetScore()}
+            navigate={(target) => this.navigate(target)}
           ></Game>
         )
       }
@@ -76,14 +76,6 @@ class App extends Component {
             setSpeed={(speed) => this.setSpeed(speed)}
             goBack={() => this.navigate('')}
           ></Settings>
-        )
-      }
-      case 'gameOver': {
-        return (
-          <GameOver
-            startNewGame={() => this.navigate('game')}
-            navigateTitle={() => this.navigate('')}
-          ></GameOver>
         )
       }
       default: {

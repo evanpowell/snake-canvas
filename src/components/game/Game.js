@@ -4,6 +4,7 @@ import './Game.scss';
 import startGame from './canvas';
 import Controls from '../controls/Controls';
 import checkMobile from './checkMobile';
+import GameOver from '../gameOver/GameOver';
 
 class Game extends Component {
   constructor(props) {
@@ -13,9 +14,12 @@ class Game extends Component {
     this.startGame = startGame;
 
     this.state = {
-      isVerticalMobile: false,
-      isHorizontalMobile: false
+      isVertical: false,
+      isHorizontalMobile: false,
+      isGameOver: false
     }
+
+    this.gameOver = this.gameOver.bind(this);
   }
 
   componentDidMount() {
@@ -38,8 +42,15 @@ class Game extends Component {
     }
     
     if (!isHorizontalMobile) {
-      this.startGame(this.props.wall, this.props.speed, this.props.setGameOver, this.props.incrementScore);
+      this.startGame(this.props.wall, this.props.speed, this.gameOver, this.props.incrementScore);
     }
+  }
+
+  gameOver() {
+    console.log('game over');
+    this.setState({
+      isGameOver: true
+    });
   }
 
   render() {
@@ -60,6 +71,7 @@ class Game extends Component {
       return (
         <div className="screen">
           <canvas id="game"></canvas>
+          { this.state.isGameOver && <GameOver navigate={this.props.navigate} /> }
           { controls }
         </div>
       );

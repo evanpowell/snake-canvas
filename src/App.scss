@@ -5,11 +5,10 @@
 
   &__score {
     font-size: 14px;
-    border: 1px solid #111;
     border-bottom: none;
-    background-color: #efefef;
     display: inline-block;
     padding: 3px 5px;
+    color: #cecece;
   }
 }
 
@@ -26,6 +25,7 @@
   background-color: #111;
   color: #efefef;
   position: relative;
+  border: 2px solid #cecece;
   
   &--title {
     padding-top: 25%;

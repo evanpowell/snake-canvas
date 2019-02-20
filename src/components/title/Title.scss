@@ -1,8 +1,11 @@
 
 .main-title {
-  color: #0bdd1d;
+  -webkit-text-stroke: 1px #0bdd1d;
+  paint-order: stroke fill;
+  color: #111;
   width: fit-content;
   margin: 0 auto;
+  font-size: 2.8rem;
 
   animation: mainTitle 1s linear infinite;
   -webkit-animation: mainTitle 1s linear infinite;

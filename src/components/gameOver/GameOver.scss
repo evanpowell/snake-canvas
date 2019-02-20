@@ -1,3 +1,90 @@
-.game-over-title {
-  color: #e00606;
+.game-over {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+
+  animation-name: backgroundFadeIn;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-delay: .5s;
+
+
+
+  &__title {
+    -webkit-text-stroke: 1px #e00606;
+    paint-order: stroke fill;
+    color: #111;
+  }
+
+  &__options {
+    opacity: 0;
+
+    animation-name: textFadeIn;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-delay: .5s;
+  }
+}
+
+@keyframes textFadeIn {
+  0% {
+    opacity: 0;
+  }
+  24% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  49% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  74% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.75;
+  }
+  99% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes backgroundFadeIn {
+  0% {
+    background-color: transparent;
+  }
+  24% {
+    background-color: transparent;
+  }
+  25% {
+    background-color: rgba(17, 17, 17, 0.25);
+  }
+  49% {
+    background-color: rgba(17, 17, 17, 0.25);
+  }
+  50% {
+    background-color: rgba(17, 17, 17, 0.5);
+  }
+  74% {
+    background-color: rgba(17, 17, 17, 0.5);
+  }
+  75% {
+    background-color: rgba(17, 17, 17, 0.75);
+  }
+  99% {
+    background-color: rgba(17, 17, 17, 0.75);
+  }
+  100% {
+    background-color: rgba(17, 17, 17, 1);
+  }
 }

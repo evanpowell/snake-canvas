@@ -14,8 +14,6 @@ let speed;
 let gameOver;
 let incScore;
 
-let isGameOver;
-
 const config = {
   color: {
     snake: '#0bdd1d',
@@ -40,7 +38,6 @@ const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
   gameOver = gameOverCb;
   incScore = incScoreCb;
   speed = [150, 100, 50][speedSetting - 1];
-  isGameOver = false;
 
   canvas = document.getElementById('game');
   canvas.width = canvas.offsetWidth;
@@ -127,12 +124,16 @@ const fillScreen = (isOverlay) => {
 const freezeGame = () => {
   const time = 2000 / snake.blocks.length;
 
-  let i = 1;
+  snake.renderSnakeBlock(snake.blocks[1], '#cecece');
+  let i = 2;
   const turnSnakeWhite = setInterval(() => {
     if (i < snake.blocks.length) {
       snake.renderSnakeBlock(snake.blocks[i], '#cecece');
-      i += 1
-    } else {
+    }
+
+    i += 1;
+    
+    if (i === snake.blocks.length) {
       let { x, y, direction } = snake.blocks[snake.blocks.length - 1]
       switch (direction) {
         case 'up': {
@@ -159,7 +160,10 @@ const freezeGame = () => {
         width: blockSize + 2,
         height: blockSize + 2
       }, '#111');
+
       // fillScreen(true);
+      canvas.style.zIndex = 0;
+      gameOver();
       clearInterval(turnSnakeWhite);
     }
   }, time);
