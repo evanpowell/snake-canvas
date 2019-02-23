@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const { DATABASE_URL } = process.env;
 
-const sequelize = new Sequelize('postgres://zcqdqwczvlduel:16a0e12ea38d0e2c6efe30ddeb20a03df9f9597faa143032ac1d27afddeafd05@ec2-107-22-238-186.compute-1.amazonaws.com:5432/dblave5oha691s', {
+const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
   dialectOptions: {
     ssl: true
