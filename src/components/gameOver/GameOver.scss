@@ -35,27 +35,6 @@
   0% {
     opacity: 0;
   }
-  24% {
-    opacity: 0;
-  }
-  25% {
-    opacity: 0.25;
-  }
-  49% {
-    opacity: 0.25;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  74% {
-    opacity: 0.5;
-  }
-  75% {
-    opacity: 0.75;
-  }
-  99% {
-    opacity: 0.75;
-  }
   100% {
     opacity: 1;
   }
@@ -65,28 +44,7 @@
   0% {
     background-color: transparent;
   }
-  24% {
-    background-color: transparent;
-  }
-  25% {
-    background-color: rgba(17, 17, 17, 0.25);
-  }
-  49% {
-    background-color: rgba(17, 17, 17, 0.25);
-  }
-  50% {
-    background-color: rgba(17, 17, 17, 0.5);
-  }
-  74% {
-    background-color: rgba(17, 17, 17, 0.5);
-  }
-  75% {
-    background-color: rgba(17, 17, 17, 0.75);
-  }
-  99% {
-    background-color: rgba(17, 17, 17, 0.75);
-  }
   100% {
-    background-color: rgba(17, 17, 17, 1);
+    background-color: rgba(17, 17, 17, .85);
   }
 }

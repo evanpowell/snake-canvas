@@ -1,5 +1,6 @@
-import Snake from '../../gameLogic/snake';
-import Food from '../../gameLogic/food';
+import Snake from './snake';
+import Food from './food';
+import { isNullOrUndefined } from 'util';
 
 let canvas;
 let ctx;
@@ -30,7 +31,8 @@ const config = {
   },
   checkBlock: (x, y, a, b) => {
     return x === a && y === b;
-  }
+  },
+  retractSnake: null
 }
 
 const startGame = (wallSetting, speedSetting, gameOverCb, incScoreCb) => {
@@ -124,11 +126,23 @@ const fillScreen = (isOverlay) => {
 const freezeGame = () => {
   const time = 2000 / snake.blocks.length;
 
-  snake.renderSnakeBlock(snake.blocks[1], '#cecece');
-  let i = 2;
-  const turnSnakeWhite = setInterval(() => {
+  let snakeColor = '#cecece';
+
+  let isFirstTime = true;
+  let i = 1;
+  snake.renderSnakeBlock(snake.blocks[i], snakeColor);
+
+  config.retractSnake = setInterval(() => {
+    if (i < 1) {
+      i += 1;
+      return;
+    }
+    if (isFirstTime) {
+      i = 2;
+      isFirstTime = false;
+    }
     if (i < snake.blocks.length) {
-      snake.renderSnakeBlock(snake.blocks[i], '#cecece');
+      snake.renderSnakeBlock(snake.blocks[i], snakeColor);
     }
 
     i += 1;
@@ -162,11 +176,19 @@ const freezeGame = () => {
       }, '#111');
 
       // fillScreen(true);
-      canvas.style.zIndex = 0;
+      // canvas.style.zIndex = 0;
       gameOver();
-      clearInterval(turnSnakeWhite);
+      i = 1 - Math.round(snake.blocks.length / 4);
+      if (snakeColor === '#cecece') {
+        snakeColor = '#0bdd1d';
+      } else {
+        snakeColor = '#cecece';
+      }
     }
   }, time);
 }
 
-export default startGame;
+export {
+  startGame,
+  config
+} 

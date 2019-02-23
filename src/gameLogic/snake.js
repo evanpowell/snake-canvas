@@ -128,7 +128,7 @@ class Snake {
     this.config.renderBlock(this.getSnakeBlockRect(snakeBlock), color);
   }
 
-  getSnakeBlockRect({ x, y, direction }, isDestroy) {
+  getSnakeBlockRect({ x, y, direction }) {
     const { blockSize } = this.config;
     let top = y * blockSize + 1,
       left = x * blockSize + 1,

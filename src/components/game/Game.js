@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import './Game.scss';
-import startGame from './canvas';
+import { startGame, config } from '../../gameLogic';
 import Controls from '../controls/Controls';
 import checkMobile from './checkMobile';
 import GameOver from '../gameOver/GameOver';
@@ -13,6 +13,7 @@ class Game extends Component {
     
     this.checkMobile = checkMobile;
     this.startGame = startGame;
+    this.gameConfig = config;
 
     this.state = {
       isVertical: false,
@@ -23,6 +24,8 @@ class Game extends Component {
     }
 
     this.gameOver = this.gameOver.bind(this);
+    this.clearSnakeRetraction = this.clearSnakeRetraction.bind(this);
+    this.playAgain = this.playAgain.bind(this);
   }
 
   componentWillMount() {
@@ -43,7 +46,6 @@ class Game extends Component {
         this.setState({
           highScores
         });
-        console.log('highScores', highScores);
       });
   }
 
@@ -71,7 +73,16 @@ class Game extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.clearSnakeRetraction();
+  }
+  
+  clearSnakeRetraction() {
+    clearInterval(this.gameConfig.retractSnake);
+  }
+  
   playAgain() {
+    this.clearSnakeRetraction();
     this.props.resetScore();
     this.setState({
       isGameOver: false
@@ -111,7 +122,7 @@ class Game extends Component {
       return (
         <div className="screen">
           <canvas id="game"></canvas>
-          { this.state.isGameOver && <GameOver navigate={this.props.navigate} playAgain={() => this.playAgain()} /> }
+          { this.state.isGameOver && <GameOver navigate={this.props.navigate} playAgain={this.playAgain} /> }
           { controls }
         </div>
       );

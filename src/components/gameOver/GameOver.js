@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 
 import './GameOver.scss';
-import { areComponentsEqual } from 'react-hot-loader';
 
 class GameOver extends Component {
+  constructor(props) {
+    super(props);
+
+    this.goBack = this.goBack.bind(this);
+  }
+
   componentDidMount() {
     const playAgainButton = document.getElementById('play-again-btn');
     const backButton = document.getElementById('back-btn');
@@ -25,6 +30,10 @@ class GameOver extends Component {
     }, 2000);
   }
 
+  goBack() {
+    this.props.navigate('');
+  }
+
   render() {
     return (
       <div className="game-over">
@@ -38,7 +47,7 @@ class GameOver extends Component {
         <button
           id="back-btn"
           className="options--btn"
-          onClick={() => this.props.navigate('')}
+          onClick={this.goBack}
         >Back</button>
         </div>
       </div>
