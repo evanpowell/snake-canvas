@@ -10,7 +10,8 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../dist')));
 
 app.get('/highScores', (req, res) => {
-  db.getHighScoresBySetting(false, 2)
+  const { wall, speed } = req.query;
+  db.getHighScoresBySetting(wall, speed)
     .then((highScores) => {
       res.send(highScores);
     });

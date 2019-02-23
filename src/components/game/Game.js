@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import './Game.scss';
 import startGame from './canvas';
@@ -16,10 +17,34 @@ class Game extends Component {
     this.state = {
       isVertical: false,
       isHorizontalMobile: false,
-      isGameOver: false
+      isGameOver: false,
+      highScores: [],
+      isHighScore: false
     }
 
     this.gameOver = this.gameOver.bind(this);
+  }
+
+  componentWillMount() {
+    let highScores;
+    axios.get('highScores', {
+      params: {
+        wall: this.props.wall,
+        speed: this.props.speed
+      }
+    }).then(({ data }) => {
+        highScores = data.sort((a, b) => {
+          if (a.score === b.score) {
+            return a.createdAt - b.createdAt;
+          }
+          return a.score - b.score;
+        });
+
+        this.setState({
+          highScores
+        });
+        console.log('highScores', highScores);
+      });
   }
 
   componentDidMount() {
@@ -55,6 +80,14 @@ class Game extends Component {
   }
 
   gameOver() {
+    let isHighScore = false;
+    
+    if (this.state.highScores.length < 10) {
+      isHighScore = true;
+    } else {
+
+    }
+
     this.setState({
       isGameOver: true
     });

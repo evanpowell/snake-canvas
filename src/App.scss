@@ -46,6 +46,7 @@
     background: transparent;
     font-family: inherit;
     font-size: inherit;
+    padding: 5px 4px;
     
     &:not(:last-child) {
       margin-bottom: 50px;
@@ -58,6 +59,9 @@
 
     &:focus {
       outline: none;
+      color: #fff;
+      border: 1px solid #fff;
+      padding: 4px 3px;
     }
   }
 }

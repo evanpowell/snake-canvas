@@ -1,14 +1,21 @@
-const { Sequelize, Highscore } = require('./index');
+const { HighScore } = require('./index');
 
 const getHighScoresBySetting = (wall, speed) => {
   return HighScore.findAll({
-    attributes: ['name', 'score'],
+    attributes: ['playerName', 'score', 'createdAt'],
     where: {
       wall,
-      speed 
+      speed
     }
-  }).then((highScores) => {
-    return highScores;
+  });
+}
+
+const createHighScore = (playerName, score, wall, speed) => {
+  return HighScore.create({
+    playerName,
+    score,
+    wall,
+    speed
   });
 }
 

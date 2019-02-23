@@ -1,11 +1,22 @@
 .options {
-  padding: 0;
+  &--settings {
+    padding: 0;
+    height: 55%;
+  }
 
   &--option {
     margin-bottom: 25px;
     
     p {
-      margin-bottom: 10px;
+      margin: 0 auto 15px auto;
+      padding: 5px 4px;
+      display: inline-block;
+
+      &:focus {
+        outline: none;
+        padding: 4px 3px;
+        border: 1px solid #fff;
+      }
     }
 
     span {

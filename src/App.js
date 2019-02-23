@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import './App.scss';
 
@@ -53,6 +54,27 @@ class App extends Component {
     });
   }
 
+  componentDidMount() {
+    let allElements = document.getElementsByTagName('*');
+    
+    this.setCursorStyleOnElements(allElements, 'none');
+
+    document.addEventListener('mousemove', () => {
+      allElements = document.getElementsByTagName('*');
+      this.setCursorStyleOnElements(allElements, 'initial');
+
+      setTimeout(() => {
+        this.setCursorStyleOnElements(allElements, 'none');
+      }, 1000);
+    })
+  }
+
+  setCursorStyleOnElements(elementsList, cursorStyle) {
+    for (let i = 0; i < elementsList.length; i++) {
+      elementsList[i].style.cursor = cursorStyle;
+    }
+  }
+
   renderScreen() {
     switch (this.state.screen) {
       case 'game': {
@@ -60,6 +82,7 @@ class App extends Component {
           <Game
             wall={this.state.wall}
             speed={this.state.speed}
+            score={this.state.score}
             setGameOver={() => this.setGameOver()}
             incrementScore={() => this.incrementScore()}
             resetScore={() => this.resetScore()}
