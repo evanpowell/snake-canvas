@@ -26,6 +26,37 @@
     animation-fill-mode: forwards;
     animation-timing-function: linear;
     animation-delay: .5s;
+
+    width: 100%;
+    margin-top: 40px;
+
+    & * {
+      background: transparent;
+      border: none;
+    }
+
+    &--input {
+      margin-top: 40px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #0bdd1d;
+      color: #0bdd1d;
+      text-align: center;
+      font-family: inherit;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &__submit {
+    display: block;
+    margin: 0 auto;
+    margin-top: 40px;
+    font-family: inherit;
+    color: inherit;
+    border: 1px solid #cecece;
+    padding: 3px 4px;
   }
 }
 
