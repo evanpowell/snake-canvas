@@ -5,7 +5,6 @@ import './GameOver.scss';
 class GameOver extends Component {
   constructor(props) {
     super(props);
-
     this.goBack = this.goBack.bind(this);
   }
 

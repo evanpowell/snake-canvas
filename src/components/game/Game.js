@@ -6,6 +6,7 @@ import { startGame, config } from '../../gameLogic';
 import Controls from '../controls/Controls';
 import checkMobile from './checkMobile';
 import GameOver from '../gameOver/GameOver';
+import HighScore from '../highScore/HighScore';
 
 class Game extends Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class Game extends Component {
       isHorizontalMobile: false,
       isGameOver: false,
       highScores: [],
-      isHighScore: false
+      isHighScore: false,
+      replacedScoreId: null
     }
 
     this.gameOver = this.gameOver.bind(this);
@@ -92,15 +94,27 @@ class Game extends Component {
 
   gameOver() {
     let isHighScore = false;
-    
-    if (this.state.highScores.length < 10) {
-      isHighScore = true;
-    } else {
+    const { highScores } = this.state;
+    const { score } = this.props;
 
+    if (score > 0) {
+      if (!highScores.length || highScores[highScores.length - 1].score < score || highScores.length < 10) {
+        isHighScore = true;
+      } else {
+        const lowestHighScore = highScores[highScores.length - 1];
+
+        if (lowestHighScore.score < score) {
+          isHighScore = true;
+          this.setState({
+            replacedScoreId: lowestHighScore.id
+          });
+        }
+      }
     }
 
     this.setState({
-      isGameOver: true
+      isGameOver: true,
+      isHighScore
     });
   }
 
@@ -122,7 +136,16 @@ class Game extends Component {
       return (
         <div className="screen">
           <canvas id="game"></canvas>
-          { this.state.isGameOver && <GameOver navigate={this.props.navigate} playAgain={this.playAgain} /> }
+          { 
+            (() => {
+              if (this.state.isGameOver) {
+                if (this.state.isHighScore) {
+                  return <HighScore score={this.props.score} wall={this.props.wall} speed={this.props.speed} replacedId={this.state.replacedScoreId} />
+                }
+                return <GameOver navigate={this.props.navigate} playAgain={this.playAgain} isHighScore={this.state.isHighScore}/>
+              }
+            })()
+          }
           { controls }
         </div>
       );

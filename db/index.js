@@ -27,7 +27,7 @@ const HighScore = sequelize.define('highScore', {
 sequelize.authenticate()
   .then(() => {
     console.log('Database connection established');
-    sequelize.sync({ force: true })
+    sequelize.sync()
       .then(() => {
         console.log('Models synced');
       })

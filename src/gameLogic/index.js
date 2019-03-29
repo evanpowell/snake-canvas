@@ -129,6 +129,7 @@ const freezeGame = () => {
   let snakeColor = '#cecece';
 
   let isFirstTime = true;
+  let isFirstIteration = true;
   let i = 1;
   snake.renderSnakeBlock(snake.blocks[i], snakeColor);
 
@@ -175,9 +176,13 @@ const freezeGame = () => {
         height: blockSize + 2
       }, '#111');
 
+      if (isFirstIteration) {
+        gameOver();
+        isFirstIteration = false;
+      }
+
       // fillScreen(true);
       // canvas.style.zIndex = 0;
-      gameOver();
       i = 1 - Math.round(snake.blocks.length / 4);
       if (snakeColor === '#cecece') {
         snakeColor = '#0bdd1d';

@@ -8,6 +8,8 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, '../dist')));
 
 app.get('/highScores', (req, res) => {
@@ -16,7 +18,18 @@ app.get('/highScores', (req, res) => {
     .then((highScores) => {
       res.send(highScores);
     });
-})
+});
+
+app.post('/highScores', (req, res) => {
+  const { playerName, score, wall, speed } = req.body;
+  db.createHighScore(playerName, score, wall, speed)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);

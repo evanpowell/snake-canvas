@@ -1,0 +1,48 @@
+.high-score {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+
+  animation-name: backgroundFadeIn;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-delay: .5s;
+
+  &__title {
+    -webkit-text-stroke: 1px #e00606;
+    paint-order: stroke fill;
+    color: #111;
+  }
+
+  &__entry {
+    opacity: 0;
+
+    animation-name: textFadeIn;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-delay: .5s;
+  }
+}
+
+@keyframes textFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes backgroundFadeIn {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: rgba(17, 17, 17, .85);
+  }
+}
